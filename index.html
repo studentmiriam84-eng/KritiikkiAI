@@ -2,4 +2,133 @@
 <html lang="fi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KritiikkiAI</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    color: #2563eb;
+}
+
+textarea {
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.result {
+    background: white;
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+#score {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2563eb;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🧠 KritiikkiAI</h1>
+
+<p>Kirjoita väite, mielipide tai ajatus analysoitavaksi.</p>
+
+<textarea id="input" placeholder="Kirjoita tähän..."></textarea>
+<br>
+
+<button onclick="analyzeText()">Analysoi</button>
+
+<div class="result">
+    <h3>📊 Kriittisyysindeksi</h3>
+    <div id="score">-</div>
+</div>
+
+<div class="result">
+    <h3>✅ Vahvuudet</h3>
+    <div id="strengths"></div>
+</div>
+
+<div class="result">
+    <h3>⚠️ Riskit</h3>
+    <div id="risks"></div>
+</div>
+
+<div class="result">
+    <h3>❓ Haastavat kysymykset</h3>
+    <div id="questions"></div>
+</div>
+
+<script>
+function analyzeText() {
+
+    const text = document.getElementById("input").value.toLowerCase();
+
+    let strengths = [];
+    let risks = [];
+    let questions = [];
+
+    if (text.includes("aina") || text.includes("varmasti")) {
+        risks.push("Mahdollinen yli-itsevarmuusharha.");
+        questions.push("Mikä todistaa, että tämä on varmasti totta?");
+    }
+
+    if (text.includes("kaikki")) {
+        risks.push("Yleistämisen riski.");
+        questions.push("Onko olemassa poikkeuksia?");
+    }
+
+    if (text.includes("koska")) {
+        strengths.push("Väitteessä on perustelu.");
+    } else {
+        risks.push("Perustelu puuttuu.");
+        questions.push("Mihin näyttöön väite perustuu?");
+    }
+
+    if (text.length > 100) {
+        strengths.push("Ajatusta on käsitelty melko perusteellisesti.");
+    }
+
+    let score = 100;
+    score -= risks.length * 15;
+
+    if (score < 0) {
+        score = 0;
+    }
+
+    document.getElementById("score").innerHTML = score + " / 100";
+
+    document.getElementById("strengths").innerHTML =
+        strengths.length ? strengths.join("<br>") : "Ei havaintoja.";
+
+    document.getElementById("risks").innerHTML =
+        risks.length ? risks.join("<br>") : "Ei havaintoja.";
+
+    document.getElementById("questions").innerHTML =
+        questions.length ? questions.join("<br>") : "Ei havaintoja.";
+}
+</script>
+
+</body>
+</html>
